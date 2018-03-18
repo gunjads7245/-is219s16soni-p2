@@ -32,26 +32,67 @@ function animate() {
 
 /************* DO NOT TOUCH CODE ABOVE THIS LINE ***************/
 
+var mImages = [];
+var current = 0;
+
 function swapPhoto() {
 	//Add code here to access the #slideShow element.
 	//Access the img element and replace its source
 	//with a new image from your images array which is loaded 
 	//from the JSON string
 	console.log('swap photo');
+
+	if(current<mImages.length-1){
+		console.log(mImages[current].img);
+		document.getElementById("photo").src = mImages[current].img;
+		
+		document.getElementsByClassName("location")[0].innerHTML="Location : " + mImages[current].location;
+		document.getElementsByClassName("description")[0].innerHTML="Description : " + mImages[current].description;
+		document.getElementsByClassName("date")[0].innerHTML="Date : " + mImages[current].date;
+
+		current=current+1;
+	}
 }
 
 // Counter for the mImages array
 var mCurrentIndex = 0;
 
+function GalleryImage() {
+	//implement me as an object to hold the following data about an image:
+	this.location = "";
+	this.description = "";
+	this.date = "";
+	this.img = "" ;
+}
+
 // XMLHttpRequest variable
 var mRequest = new XMLHttpRequest();
+var jsonString = '';
+  
+mRequest.addEventListener("load", reqListener);
+mRequest.open("GET", "images.json");
+mRequest.send();
+
+function reqListener () {
+	console.log(this.responseText);
+	jsonString=this.responseText;
+
+	var mJson = JSON.parse(jsonString);
 
 
-// Array holding GalleryImage objects (see below).
-var mImages = [];
+	for (var key in mJson.images){
+		//alert(mJson.images[key].imgPath);
+		
+		var gImage = new GalleryImage();
+		gImage.location=mJson.images[key].imgLocation;
+		gImage.description=mJson.images[key].description;
+		gImage.date=mJson.images[key].date;
+		gImage.img=mJson.images[key].imgPath;
 
-// Holds the retrived JSON information
-var mJson;
+		mImages.push(gImage);
+	}
+
+  }
 
 // URL for the JSON to load by default
 // Some options for you are: images.json, images.short.json; you will need to create your own extra.json later
@@ -70,7 +111,7 @@ function makeGalleryImageOnloadCallback(galleryImage) {
 $(document).ready( function() {
 	
 	// This initially hides the photos' metadata information
-	$('.details').eq(0).hide();
+	//$('.details').eq(0).hide();
 	
 });
 
@@ -80,12 +121,3 @@ window.addEventListener('load', function() {
 
 }, false);
 
-function GalleryImage() {
-	//implement me as an object to hold the following data about an image:
-	this.location = "";
-	this.description = "";
-	this.date = "";
-	this.img = "" ;
-
-
-}
