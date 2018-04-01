@@ -42,23 +42,30 @@ function swapPhoto() {
 	//from the JSON string
 	console.log('swap photo');
 
-	if(current<mImages.length-1){
+	swapImage();
+}
+
+
+function swapImage(){
+
+	if (current < mImages.length - 1) {
 		console.log(mImages[current].img);
 		document.getElementById("photo").src = mImages[current].img;
-		
-		document.getElementsByClassName("location")[0].innerHTML="Location : " + mImages[current].location;
-		document.getElementsByClassName("description")[0].innerHTML="Description : " + mImages[current].description;
-		document.getElementsByClassName("date")[0].innerHTML="Date : " + mImages[current].date;
-
-		current=current+1;
+		document.getElementsByClassName("location")[0].innerHTML = "Location : " + mImages[current].location;
+		document.getElementsByClassName("description")[0].innerHTML = "Description : " + mImages[current].description;
+		document.getElementsByClassName("date")[0].innerHTML = "Date : " + mImages[current].date;
+		current++;
+	}else {
+		current = 0;
 	}
 }
 
-// Counter for the mImages array
-var mCurrentIndex = 0;
+
+
+
 
 function GalleryImage() {
-	//implement me as an object to hold the following data about an image:
+	//implement me as an object to holdhttp://127.0.0.1/project2/img/places/thailand.jpg the following data about an image:
 	this.location = "";
 	this.description = "";
 	this.date = "";
@@ -108,16 +115,39 @@ function makeGalleryImageOnloadCallback(galleryImage) {
 	}
 }
 
+
+
+
 $(document).ready( function() {
-	
 	// This initially hides the photos' metadata information
 	//$('.details').eq(0).hide();
-	
+
+	$("#prevPhoto").click(function () {
+		console.log(current);
+		if(current > 1) 
+			current--;
+			current--;
+		swapImage();
+	});
+
+	$("#nextPhoto").click(function () {
+		console.log(current);
+		if(current < mImages.length) 
+			current++;
+		swapImage();
+	});
+
 });
 
 window.addEventListener('load', function() {
 	
 	console.log('window loaded');
+	//click handler to the img.moreIndicator to toggle css classes
+	$(".moreIndicator").click(function () {
+		$(".moreIndicator").toggleClass("rot90 rot270");
+		$("div.details").fadeToggle("slow", function () { });
+	});
 
 }, false);
+
 
