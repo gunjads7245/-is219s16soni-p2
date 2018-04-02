@@ -32,6 +32,27 @@ function animate() {
 
 /************* DO NOT TOUCH CODE ABOVE THIS LINE ***************/
 
+function getQueryParams(qs) {
+ qs = qs.split("+").join(" ");
+ var params = {},
+ tokens,
+ re = /[?&]?([^=]+)=([^&]*)/g;
+ while (tokens = re.exec(qs)) {
+ params[decodeURIComponent(tokens[1])]
+ = decodeURIComponent(tokens[2]);
+ }
+ return params;
+}
+var $_GET = getQueryParams(document.location.search);
+var mUrl = "images.json";
+
+if ($_GET["json"] != undefined){
+	mUrl = $_GET["json"];
+}
+
+console.log($_GET["json"]); 
+
+
 var mImages = [];
 var current = 0;
 
@@ -77,7 +98,7 @@ var mRequest = new XMLHttpRequest();
 var jsonString = '';
   
 mRequest.addEventListener("load", reqListener);
-mRequest.open("GET", "images.json");
+mRequest.open("GET", mUrl, true);
 mRequest.send();
 
 function reqListener () {
@@ -103,7 +124,7 @@ function reqListener () {
 
 // URL for the JSON to load by default
 // Some options for you are: images.json, images.short.json; you will need to create your own extra.json later
-var mUrl = 'insert_url_here_to_image_json';
+var mUrl = 'index.html?json=images.json';
 
 
 //You can optionally use the following function as your event callback for loading the source of Images from your json data (for HTMLImageObject).
@@ -140,7 +161,7 @@ $(document).ready( function() {
 });
 
 window.addEventListener('load', function() {
-	
+
 	console.log('window loaded');
 	//click handler to the img.moreIndicator to toggle css classes
 	$(".moreIndicator").click(function () {
